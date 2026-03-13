@@ -1,0 +1,2632 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SHEQ Management System API",
+        "description": "Internal API for the SHEQ Management System API, providing access to core services.",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/complaints": {
+            "get": {
+                "tags": [
+                    "Complaints"
+                ],
+                "summary": "Get list of complaints",
+                "description": "Retrieve a paginated list of complaints with comprehensive filtering options including date ranges",
+                "operationId": "getComplaints",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of complaints to return (1-100)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 50,
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter complaints by status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "open",
+                                "closed"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "nature",
+                        "in": "query",
+                        "description": "Filter complaints by nature/type",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "date_from",
+                        "in": "query",
+                        "description": "Filter complaints from this date (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-01-01"
+                        }
+                    },
+                    {
+                        "name": "date_to",
+                        "in": "query",
+                        "description": "Filter complaints to this date (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-12-31"
+                        }
+                    },
+                    {
+                        "name": "pcn_number",
+                        "in": "query",
+                        "description": "Filter complaints by PCN number",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 50
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "General search across name, PCN, nature fields",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 25
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "filters": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "nature": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "date_from": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "date_to": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "pcn_number": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "search": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "date_received": {
+                                                        "type": "string",
+                                                        "example": "15/01/2024"
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Jane Smith"
+                                                    },
+                                                    "pcn_number": {
+                                                        "type": "string",
+                                                        "example": "PCN123456"
+                                                    },
+                                                    "site_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "nature": {
+                                                        "type": "string",
+                                                        "example": "Parking Fine Dispute"
+                                                    },
+                                                    "date_acknowledged": {
+                                                        "type": "string",
+                                                        "example": "16/01/2024",
+                                                        "nullable": true
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "open",
+                                                            "closed"
+                                                        ],
+                                                        "example": "open"
+                                                    },
+                                                    "conclusion": {
+                                                        "type": "string",
+                                                        "example": "Complaint resolved",
+                                                        "nullable": true
+                                                    },
+                                                    "date_concluded": {
+                                                        "type": "string",
+                                                        "example": "20/01/2024",
+                                                        "nullable": true
+                                                    },
+                                                    "ico_complaint": {
+                                                        "type": "boolean",
+                                                        "example": false
+                                                    },
+                                                    "archived": {
+                                                        "type": "boolean",
+                                                        "example": false
+                                                    },
+                                                    "archived_by": {
+                                                        "type": "integer",
+                                                        "nullable": true
+                                                    },
+                                                    "archived_at": {
+                                                        "type": "string",
+                                                        "nullable": true
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Complaints"
+                ],
+                "summary": "Create a new complaint",
+                "description": "Create a new complaint with the provided information",
+                "operationId": "createComplaint",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "nature"
+                                ],
+                                "properties": {
+                                    "date_received": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-15"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Jane Smith"
+                                    },
+                                    "pcn_number": {
+                                        "type": "string",
+                                        "example": "PCN123456"
+                                    },
+                                    "site_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "nature": {
+                                        "type": "string",
+                                        "example": "Parking Fine Dispute"
+                                    },
+                                    "date_acknowledged": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-16",
+                                        "nullable": true
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "default": "open",
+                                        "enum": [
+                                            "open",
+                                            "closed"
+                                        ],
+                                        "example": "open"
+                                    },
+                                    "conclusion": {
+                                        "type": "string",
+                                        "example": "Complaint resolved",
+                                        "nullable": true
+                                    },
+                                    "date_concluded": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-20",
+                                        "nullable": true
+                                    },
+                                    "ico_complaint": {
+                                        "type": "boolean",
+                                        "default": false,
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Complaint created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Complaint created successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "date_received": {
+                                                    "type": "string",
+                                                    "example": "15/01/2024"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Jane Smith"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/complaints/{complaint}": {
+            "get": {
+                "tags": [
+                    "Complaints"
+                ],
+                "summary": "Get a specific complaint",
+                "description": "Retrieve details of a specific complaint by ID",
+                "operationId": "getComplaint",
+                "parameters": [
+                    {
+                        "name": "complaint",
+                        "in": "path",
+                        "description": "Complaint ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "date_received": {
+                                                    "type": "string",
+                                                    "example": "15/01/2024"
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Jane Smith"
+                                                },
+                                                "pcn_number": {
+                                                    "type": "string",
+                                                    "example": "PCN123456"
+                                                },
+                                                "site_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "nature": {
+                                                    "type": "string",
+                                                    "example": "Parking Fine Dispute"
+                                                },
+                                                "date_acknowledged": {
+                                                    "type": "string",
+                                                    "example": "16/01/2024",
+                                                    "nullable": true
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "open",
+                                                        "closed"
+                                                    ],
+                                                    "example": "open"
+                                                },
+                                                "conclusion": {
+                                                    "type": "string",
+                                                    "example": "Complaint resolved",
+                                                    "nullable": true
+                                                },
+                                                "date_concluded": {
+                                                    "type": "string",
+                                                    "example": "20/01/2024",
+                                                    "nullable": true
+                                                },
+                                                "ico_complaint": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                },
+                                                "archived": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Complaint not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Complaints"
+                ],
+                "summary": "Update a complaint",
+                "description": "Update an existing complaint with new information. Auto-sets conclusion date when status changes to closed.",
+                "operationId": "updateComplaint",
+                "parameters": [
+                    {
+                        "name": "complaint",
+                        "in": "path",
+                        "description": "Complaint ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "date_received": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-15"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Jane Smith"
+                                    },
+                                    "pcn_number": {
+                                        "type": "string",
+                                        "example": "PCN123456"
+                                    },
+                                    "site_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "nature": {
+                                        "type": "string",
+                                        "example": "Parking Fine Dispute"
+                                    },
+                                    "date_acknowledged": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-16",
+                                        "nullable": true
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "open",
+                                            "closed"
+                                        ],
+                                        "example": "closed"
+                                    },
+                                    "conclusion": {
+                                        "type": "string",
+                                        "example": "Complaint resolved",
+                                        "nullable": true
+                                    },
+                                    "date_concluded": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-20",
+                                        "nullable": true
+                                    },
+                                    "ico_complaint": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Complaint updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Complaint updated successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "closed"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Complaint not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Complaints"
+                ],
+                "summary": "Delete a complaint",
+                "description": "Archive an existing complaint instead of hard deleting it",
+                "operationId": "deleteComplaint",
+                "parameters": [
+                    {
+                        "name": "complaint",
+                        "in": "path",
+                        "description": "Complaint ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Complaint archived successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Complaint archived successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Complaint not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/customers": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get list of customers",
+                "description": "Retrieve a paginated list of customers with optional filtering and searching",
+                "operationId": "getCustomers",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of customers to return (1-100)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 50,
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search customers by name, email, or phone",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "active",
+                        "in": "query",
+                        "description": "Filter customers by active status (accepts: true, false, 1, 0)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false",
+                                "1",
+                                "0"
+                            ],
+                            "example": "true"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 25
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "ABC Parking Ltd"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "contact@abcparking.com"
+                                                    },
+                                                    "phone": {
+                                                        "type": "string",
+                                                        "example": "01234567890",
+                                                        "nullable": true
+                                                    },
+                                                    "address": {
+                                                        "type": "string",
+                                                        "example": "123 Main Street",
+                                                        "nullable": true
+                                                    },
+                                                    "postcode": {
+                                                        "type": "string",
+                                                        "example": "AB12 3CD",
+                                                        "nullable": true
+                                                    },
+                                                    "contact_person": {
+                                                        "type": "string",
+                                                        "example": "John Smith",
+                                                        "nullable": true
+                                                    },
+                                                    "company": {
+                                                        "type": "string",
+                                                        "example": "ABC Parking Ltd",
+                                                        "nullable": true
+                                                    },
+                                                    "active": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "notes": {
+                                                        "type": "string",
+                                                        "example": "Important client",
+                                                        "nullable": true
+                                                    },
+                                                    "full_address": {
+                                                        "type": "string",
+                                                        "example": "123 Main Street, AB12 3CD"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Create a new customer",
+                "description": "Create a new customer with the provided information",
+                "operationId": "createCustomer",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "ABC Parking Ltd"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "contact@abcparking.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "01234567890",
+                                        "nullable": true
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Main Street",
+                                        "nullable": true
+                                    },
+                                    "postcode": {
+                                        "type": "string",
+                                        "example": "AB12 3CD",
+                                        "nullable": true
+                                    },
+                                    "contact_person": {
+                                        "type": "string",
+                                        "example": "John Smith",
+                                        "nullable": true
+                                    },
+                                    "company": {
+                                        "type": "string",
+                                        "example": "ABC Parking Ltd",
+                                        "nullable": true
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "default": true,
+                                        "example": true
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Important client",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Customer created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer created successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "ABC Parking Ltd"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "contact@abcparking.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/customers/{customer}": {
+            "get": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get a specific customer",
+                "description": "Retrieve details of a specific customer by ID",
+                "operationId": "getCustomer",
+                "parameters": [
+                    {
+                        "name": "customer",
+                        "in": "path",
+                        "description": "Customer ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "ABC Parking Ltd"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "contact@abcparking.com"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "01234567890",
+                                                    "nullable": true
+                                                },
+                                                "address": {
+                                                    "type": "string",
+                                                    "example": "123 Main Street",
+                                                    "nullable": true
+                                                },
+                                                "postcode": {
+                                                    "type": "string",
+                                                    "example": "AB12 3CD",
+                                                    "nullable": true
+                                                },
+                                                "contact_person": {
+                                                    "type": "string",
+                                                    "example": "John Smith",
+                                                    "nullable": true
+                                                },
+                                                "company": {
+                                                    "type": "string",
+                                                    "example": "ABC Parking Ltd",
+                                                    "nullable": true
+                                                },
+                                                "active": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "notes": {
+                                                    "type": "string",
+                                                    "example": "Important client",
+                                                    "nullable": true
+                                                },
+                                                "full_address": {
+                                                    "type": "string",
+                                                    "example": "123 Main Street, AB12 3CD"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Update a customer",
+                "description": "Update an existing customer with new information",
+                "operationId": "updateCustomer",
+                "parameters": [
+                    {
+                        "name": "customer",
+                        "in": "path",
+                        "description": "Customer ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "ABC Parking Ltd"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "contact@abcparking.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "01234567890",
+                                        "nullable": true
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Main Street",
+                                        "nullable": true
+                                    },
+                                    "postcode": {
+                                        "type": "string",
+                                        "example": "AB12 3CD",
+                                        "nullable": true
+                                    },
+                                    "contact_person": {
+                                        "type": "string",
+                                        "example": "John Smith",
+                                        "nullable": true
+                                    },
+                                    "company": {
+                                        "type": "string",
+                                        "example": "ABC Parking Ltd",
+                                        "nullable": true
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Important client",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Customer updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer updated successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "ABC Parking Ltd"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "contact@abcparking.com"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Delete a customer",
+                "description": "Delete an existing customer. Consider archiving instead of deleting if the customer has associated data.",
+                "operationId": "deleteCustomer",
+                "parameters": [
+                    {
+                        "name": "customer",
+                        "in": "path",
+                        "description": "Customer ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Customer deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found"
+                    },
+                    "409": {
+                        "description": "Cannot delete customer with associated records",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cannot delete customer because they have associated sites or complaints. Consider archiving the customer instead (set active = false) to maintain data integrity."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/health": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Check application health",
+                "description": "Returns the health status of the application including database connectivity",
+                "operationId": "healthCheck",
+                "responses": {
+                    "200": {
+                        "description": "System is healthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "ok"
+                                        },
+                                        "services": {
+                                            "properties": {
+                                                "database": {
+                                                    "type": "string",
+                                                    "example": "ok"
+                                                },
+                                                "api": {
+                                                    "type": "string",
+                                                    "example": "ok"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "version": {
+                                            "type": "string",
+                                            "example": "1.0.0"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "503": {
+                        "description": "System is unhealthy",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "services": {
+                                            "properties": {
+                                                "database": {
+                                                    "type": "string",
+                                                    "example": "error"
+                                                },
+                                                "api": {
+                                                    "type": "string",
+                                                    "example": "ok"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "version": {
+                                            "type": "string",
+                                            "example": "1.0.0"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/incident-reports": {
+            "get": {
+                "tags": [
+                    "Incident Reports"
+                ],
+                "summary": "Get list of incident reports",
+                "description": "Retrieve a paginated list of incident reports with comprehensive filtering options including date ranges",
+                "operationId": "getIncidentReports",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of incident reports to return (1-100)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 50,
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter incident reports by status",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "pending",
+                                "open",
+                                "closed",
+                                "resolved"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "incident_type_id",
+                        "in": "query",
+                        "description": "Filter incident reports by incident type ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date_from",
+                        "in": "query",
+                        "description": "Filter incident reports from this date (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-01-01"
+                        }
+                    },
+                    {
+                        "name": "date_to",
+                        "in": "query",
+                        "description": "Filter incident reports to this date (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date",
+                            "example": "2024-12-31"
+                        }
+                    },
+                    {
+                        "name": "site_id",
+                        "in": "query",
+                        "description": "Filter incident reports by site ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "General search across description, location, what happened fields",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 25
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "filters": {
+                                            "properties": {
+                                                "status": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "incident_type_id": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "date_from": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "date_to": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                },
+                                                "site_id": {
+                                                    "type": "integer",
+                                                    "nullable": true
+                                                },
+                                                "search": {
+                                                    "type": "string",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "brief_description": {
+                                                        "type": "string",
+                                                        "example": "Slip and fall incident"
+                                                    },
+                                                    "date_of_occurrence": {
+                                                        "type": "string",
+                                                        "example": "2024-01-15"
+                                                    },
+                                                    "time_of_occurrence": {
+                                                        "type": "string",
+                                                        "example": "14:30:00"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Main entrance"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "enum": [
+                                                            "pending",
+                                                            "open",
+                                                            "closed",
+                                                            "resolved"
+                                                        ],
+                                                        "example": "pending"
+                                                    },
+                                                    "incident_type_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "site_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "what_happened": {
+                                                        "type": "string",
+                                                        "example": "Employee slipped on wet floor"
+                                                    },
+                                                    "archived": {
+                                                        "type": "boolean",
+                                                        "example": false
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "incident_type": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Slip/Trip/Fall"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "site": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "Main Office"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Incident Reports"
+                ],
+                "summary": "Create a new incident report",
+                "description": "Create a new incident report with the provided information",
+                "operationId": "createIncidentReport",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "brief_description",
+                                    "date_of_occurrence",
+                                    "location"
+                                ],
+                                "properties": {
+                                    "brief_description": {
+                                        "type": "string",
+                                        "example": "Slip and fall incident"
+                                    },
+                                    "incident_type_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "location": {
+                                        "type": "string",
+                                        "example": "Main entrance"
+                                    },
+                                    "additional_information": {
+                                        "type": "string",
+                                        "example": "Additional details about the incident"
+                                    },
+                                    "date_of_occurrence": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2024-01-15"
+                                    },
+                                    "time_of_occurrence": {
+                                        "type": "string",
+                                        "format": "time",
+                                        "example": "14:30:00"
+                                    },
+                                    "work_shift": {
+                                        "type": "string",
+                                        "example": "Day shift"
+                                    },
+                                    "hours_worked_prior": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 6.5
+                                    },
+                                    "site_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "what_happened": {
+                                        "type": "string",
+                                        "example": "Employee slipped on wet floor"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "default": "pending",
+                                        "enum": [
+                                            "pending",
+                                            "open",
+                                            "closed",
+                                            "resolved"
+                                        ],
+                                        "example": "pending"
+                                    },
+                                    "affected_person_source": {
+                                        "type": "string",
+                                        "enum": [
+                                            "employee",
+                                            "customer",
+                                            "other"
+                                        ],
+                                        "example": "employee"
+                                    },
+                                    "affected_employee_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "reported_by_source": {
+                                        "type": "string",
+                                        "enum": [
+                                            "employee",
+                                            "customer",
+                                            "other"
+                                        ],
+                                        "example": "employee"
+                                    },
+                                    "reported_employee_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Incident report created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Incident report created successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "brief_description": {
+                                                    "type": "string",
+                                                    "example": "Slip and fall incident"
+                                                },
+                                                "date_of_occurrence": {
+                                                    "type": "string",
+                                                    "example": "2024-01-15"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/incident-reports/{incidentReport}": {
+            "get": {
+                "tags": [
+                    "Incident Reports"
+                ],
+                "summary": "Get a specific incident report",
+                "description": "Retrieve details of a specific incident report by ID",
+                "operationId": "getIncidentReport",
+                "parameters": [
+                    {
+                        "name": "incidentReport",
+                        "in": "path",
+                        "description": "Incident Report ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "brief_description": {
+                                                    "type": "string",
+                                                    "example": "Slip and fall incident"
+                                                },
+                                                "date_of_occurrence": {
+                                                    "type": "string",
+                                                    "example": "2024-01-15"
+                                                },
+                                                "time_of_occurrence": {
+                                                    "type": "string",
+                                                    "example": "14:30:00"
+                                                },
+                                                "location": {
+                                                    "type": "string",
+                                                    "example": "Main entrance"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "pending",
+                                                        "open",
+                                                        "closed",
+                                                        "resolved"
+                                                    ],
+                                                    "example": "pending"
+                                                },
+                                                "incident_type_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "site_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "what_happened": {
+                                                    "type": "string",
+                                                    "example": "Employee slipped on wet floor"
+                                                },
+                                                "archived": {
+                                                    "type": "boolean",
+                                                    "example": false
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Incident report not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Incident Reports"
+                ],
+                "summary": "Update an incident report",
+                "description": "Update an existing incident report with new information",
+                "operationId": "updateIncidentReport",
+                "parameters": [
+                    {
+                        "name": "incidentReport",
+                        "in": "path",
+                        "description": "Incident Report ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "brief_description": {
+                                        "type": "string",
+                                        "example": "Updated incident description"
+                                    },
+                                    "incident_type_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "location": {
+                                        "type": "string",
+                                        "example": "Updated location"
+                                    },
+                                    "additional_information": {
+                                        "type": "string",
+                                        "example": "Updated additional information"
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "open",
+                                            "closed",
+                                            "resolved"
+                                        ],
+                                        "example": "open"
+                                    },
+                                    "what_happened": {
+                                        "type": "string",
+                                        "example": "Updated description of what happened"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Incident report updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Incident report updated successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "open"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Incident report not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Incident Reports"
+                ],
+                "summary": "Delete an incident report",
+                "description": "Archive an existing incident report instead of hard deleting it",
+                "operationId": "deleteIncidentReport",
+                "parameters": [
+                    {
+                        "name": "incidentReport",
+                        "in": "path",
+                        "description": "Incident Report ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Incident report archived successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Incident report archived successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Incident report not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/sites": {
+            "get": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Get list of sites",
+                "description": "Retrieve a paginated list of sites with optional filtering",
+                "operationId": "getSites",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Maximum number of sites to return (1-100)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 50,
+                            "maximum": 100,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "customer_id",
+                        "in": "query",
+                        "description": "Filter sites by customer ID",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "active",
+                        "in": "query",
+                        "description": "Filter sites by active status (accepts: true, false, 1, 0)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "true",
+                                "false",
+                                "1",
+                                "0"
+                            ],
+                            "example": "true"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search sites by name or address",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "count": {
+                                            "type": "integer",
+                                            "example": 25
+                                        },
+                                        "limit": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "name": {
+                                                        "type": "string",
+                                                        "example": "Downtown Parking Site"
+                                                    },
+                                                    "customer_id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "address": {
+                                                        "type": "string",
+                                                        "example": "123 Main Street"
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "example": "London"
+                                                    },
+                                                    "county": {
+                                                        "type": "string",
+                                                        "example": "Greater London",
+                                                        "nullable": true
+                                                    },
+                                                    "postal_code": {
+                                                        "type": "string",
+                                                        "example": "SW1A 1AA"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Large downtown parking facility",
+                                                        "nullable": true
+                                                    },
+                                                    "active": {
+                                                        "type": "boolean",
+                                                        "example": true
+                                                    },
+                                                    "full_address": {
+                                                        "type": "string",
+                                                        "example": "123 Main Street, London, Greater London, SW1A 1AA"
+                                                    },
+                                                    "display_name": {
+                                                        "type": "string",
+                                                        "example": "Downtown Parking Site (1)"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string",
+                                                        "format": "date-time"
+                                                    },
+                                                    "customer": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "name": {
+                                                                "type": "string",
+                                                                "example": "ABC Parking Ltd"
+                                                            },
+                                                            "email": {
+                                                                "type": "string",
+                                                                "example": "contact@abcparking.com"
+                                                            },
+                                                            "active": {
+                                                                "type": "boolean",
+                                                                "example": true
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Create a new site",
+                "description": "Create a new site with the provided information",
+                "operationId": "createSite",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "customer_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Downtown Parking Site"
+                                    },
+                                    "customer_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Main Street",
+                                        "nullable": true
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "London",
+                                        "nullable": true
+                                    },
+                                    "county": {
+                                        "type": "string",
+                                        "example": "Greater London",
+                                        "nullable": true
+                                    },
+                                    "postal_code": {
+                                        "type": "string",
+                                        "example": "SW1A 1AA",
+                                        "nullable": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Large downtown parking facility",
+                                        "nullable": true
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "default": true,
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Site created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Site created successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Downtown Parking Site"
+                                                },
+                                                "customer_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "address": {
+                                                    "type": "string",
+                                                    "example": "123 Main Street"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/sites/{site}": {
+            "get": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Get a specific site",
+                "description": "Retrieve details of a specific site by ID",
+                "operationId": "getSite",
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "description": "Site ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Downtown Parking Site"
+                                                },
+                                                "customer_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "address": {
+                                                    "type": "string",
+                                                    "example": "123 Main Street"
+                                                },
+                                                "city": {
+                                                    "type": "string",
+                                                    "example": "London"
+                                                },
+                                                "county": {
+                                                    "type": "string",
+                                                    "example": "Greater London",
+                                                    "nullable": true
+                                                },
+                                                "postal_code": {
+                                                    "type": "string",
+                                                    "example": "SW1A 1AA"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Large downtown parking facility",
+                                                    "nullable": true
+                                                },
+                                                "active": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "full_address": {
+                                                    "type": "string",
+                                                    "example": "123 Main Street, London, Greater London, SW1A 1AA"
+                                                },
+                                                "display_name": {
+                                                    "type": "string",
+                                                    "example": "Downtown Parking Site (1)"
+                                                },
+                                                "customer": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "ABC Parking Ltd"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "contact@abcparking.com"
+                                                        },
+                                                        "active": {
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Site not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Site not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Update a site",
+                "description": "Update an existing site with new information",
+                "operationId": "updateSite",
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "description": "Site ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Downtown Parking Site"
+                                    },
+                                    "customer_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "123 Main Street",
+                                        "nullable": true
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "London",
+                                        "nullable": true
+                                    },
+                                    "county": {
+                                        "type": "string",
+                                        "example": "Greater London",
+                                        "nullable": true
+                                    },
+                                    "postal_code": {
+                                        "type": "string",
+                                        "example": "SW1A 1AA",
+                                        "nullable": true
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Large downtown parking facility",
+                                        "nullable": true
+                                    },
+                                    "active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Site updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Site updated successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Downtown Parking Site"
+                                                },
+                                                "customer_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "address": {
+                                                    "type": "string",
+                                                    "example": "123 Main Street"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Site not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Sites"
+                ],
+                "summary": "Delete a site",
+                "description": "Delete an existing site",
+                "operationId": "deleteSite",
+                "parameters": [
+                    {
+                        "name": "site",
+                        "in": "path",
+                        "description": "Site ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Site deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Site deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Site not found"
+                    },
+                    "409": {
+                        "description": "Cannot delete site with associated records",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cannot delete site because it has associated complaints. Please delete or reassign the complaints first."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Enter token to authorise requests",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Complaints",
+            "description": "Complaint management endpoints"
+        },
+        {
+            "name": "Customers",
+            "description": "Customer management endpoints"
+        },
+        {
+            "name": "Health",
+            "description": "API Endpoints for health checking"
+        },
+        {
+            "name": "Incident Reports",
+            "description": "Incident report management endpoints"
+        },
+        {
+            "name": "Sites",
+            "description": "Site management endpoints"
+        }
+    ]
+}

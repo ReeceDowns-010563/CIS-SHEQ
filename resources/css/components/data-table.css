@@ -1,0 +1,62 @@
+/* Data Table Component Styles */
+
+/* Table wrapper */
+.table-wrapper {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #6e6e6e;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.dark .table-wrapper {
+    border-color: #4b5563;
+}
+
+table {
+    width: 100%;
+    min-width: 1200px;
+}
+
+/* Table row hover effects */
+.table-row-hover:hover {
+    background-color: rgba(243, 244, 246, 0.5);
+}
+
+.dark .table-row-hover:hover {
+    background-color: rgba(55, 65, 81, 0.5);
+}
+
+.archived-row {
+    background-color: rgba(229, 231, 235, 0.3);
+}
+
+.dark .archived-row {
+    background-color: rgba(55, 65, 81, 0.3);
+}
+
+/* Mobile responsive table */
+@media (max-width: 1024px) {
+    table {
+        min-width: 1000px;
+    }
+}
+
+@media (max-width: 768px) {
+    table {
+        min-width: 800px;
+    }
+
+    .table-wrapper {
+        border-radius: 8px;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+        border-left: none;
+        border-right: none;
+    }
+
+    th, td {
+        padding: 8px 4px;
+        font-size: 12px;
+    }
+}

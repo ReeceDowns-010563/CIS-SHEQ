@@ -1,0 +1,152 @@
+/* Status Select Component Styles */
+
+.clean-select {
+    position: relative;
+    display: inline-block;
+    min-width: 120px;
+}
+
+.clean-select-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 36px;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.clean-select-button:hover {
+    opacity: 0.8;
+}
+
+.clean-select.open .clean-select-button {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    z-index: 50001;
+}
+
+.clean-select-arrow {
+    width: 14px;
+    height: 14px;
+    transition: transform 0.2s ease;
+    color: currentColor;
+    flex-shrink: 0;
+}
+
+.clean-select.open .clean-select-arrow {
+    transform: rotate(180deg);
+}
+
+.clean-select-dropdown {
+    position: fixed;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 50000;
+    max-height: 200px;
+    overflow-y: auto;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: all 0.15s ease;
+    min-width: 120px;
+}
+
+.dark .clean-select-dropdown {
+    background: #1f2937;
+    border-color: #4b5563;
+}
+
+.clean-select.open .clean-select-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.clean-select-option {
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #475569;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.dark .clean-select-option {
+    color: #e5e7eb;
+}
+
+.clean-select-option:first-child {
+    border-radius: 11px 11px 0 0;
+}
+
+.clean-select-option:last-child {
+    border-radius: 0 0 11px 11px;
+}
+
+.clean-select-option:hover {
+    background: #f1f5f9;
+}
+
+.dark .clean-select-option:hover {
+    background: #374151;
+}
+
+.clean-select-option.selected {
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.dark .clean-select-option.selected {
+    background: #1e40af;
+    color: #bfdbfe;
+}
+
+/* Status Colors - these now style the button directly */
+.status-pending .clean-select-button {
+    color: #d97706;
+    background: #fef3c7;
+    border-color: #fcd34d;
+}
+
+.status-investigating .clean-select-button {
+    color: #2563eb;
+    background: #dbeafe;
+    border-color: #93c5fd;
+}
+
+.status-completed .clean-select-button {
+    color: #059669;
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+.status-closed .clean-select-button {
+    color: #dc2626;
+    background: #fef2f2;
+    border-color: #fca5a5;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    .clean-select {
+        min-width: 100px;
+    }
+
+    .clean-select-button {
+        padding: 6px 8px;
+        font-size: 12px;
+        min-height: 32px;
+    }
+}
