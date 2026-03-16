@@ -1,0 +1,14 @@
+### Get Employee list
+GET {{baseUrl}}/list/officer?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get Employees by branch
+GET {{baseUrl}}/list/officer/branch/{{branchCode}}?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get Employees by site
+GET {{baseUrl}}/list/officer/site/{{siteCode}}?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json

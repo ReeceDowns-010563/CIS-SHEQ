@@ -1,0 +1,14 @@
+### Get Site list
+GET {{baseUrl}}/list/site?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get Sites by branch
+GET {{baseUrl}}/list/site/branch/{{branchCode}}?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get HEAD OFFICE Employees
+GET {{baseUrl}}/list/officer/branch/HO?search=reece
+Authorization: Bearer {{token}}
+Accept: application/json

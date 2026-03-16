@@ -1,0 +1,51 @@
+### All Endpoints
+
+### Get branch list
+GET {{baseUrl}}/list/branch?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get site list
+GET {{baseUrl}}/list/site?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get sites by branch
+GET {{baseUrl}}/list/site/branch/{{branchCode}}?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get employee list
+GET {{baseUrl}}/list/officer?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get employees by branch
+GET {{baseUrl}}/list/officer/branch/{{branchCode}}?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get employees by site
+GET {{baseUrl}}/list/officer/site/{{siteCode}}?page=1&limit=20
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get All Customers
+GET {{baseUrl}}/list/customer
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get Customer by ID
+GET {{baseUrl}}/list/customer/{{customerCode}}
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get All Sites (for all customers)
+GET {{baseUrl}}/list/site/customer/
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get Sites by Customer ID
+GET {{baseUrl}}/list/site/customer/{{customerCode}}
+Authorization: Bearer {{token}}
+Accept: application/json

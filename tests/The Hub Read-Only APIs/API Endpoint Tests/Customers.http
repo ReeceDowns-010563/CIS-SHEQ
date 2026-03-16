@@ -1,0 +1,19 @@
+### Get All Customers
+GET {{baseUrl}}/list/customer
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get Customer by ID
+GET {{baseUrl}}/list/customer/{{customerCode}}
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get All Sites (for all customers)
+GET {{baseUrl}}/list/site/customer/
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get Sites by Customer ID
+GET {{baseUrl}}/list/site/customer/{{customerCode}}
+Authorization: Bearer {{token}}
+Accept: application/json

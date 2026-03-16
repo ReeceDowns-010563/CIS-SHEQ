@@ -1,0 +1,4 @@
+### Get branch list
+GET {{baseUrl}}/list/branch
+Authorization: Bearer {{token}}
+Accept: application/json

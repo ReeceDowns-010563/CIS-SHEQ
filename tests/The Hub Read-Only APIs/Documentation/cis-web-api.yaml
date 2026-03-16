@@ -1,0 +1,286 @@
+openapi: 3.1.0
+info:
+  title: CIS Web API
+  version: 1.0.0
+  description: >
+    JSON API to read Timegate data.
+    Requires Bearer token authentication.
+
+servers:
+  - url: https://api.cis-security.co.uk
+    description: Production
+
+tags:
+  - name: Branches
+  - name: Sites
+  - name: Officers
+
+security:
+  - bearerAuth: []
+
+paths:
+  /list/branch:
+    get:
+      tags: [Branches]
+      summary: Read branch data
+      operationId: listBranches
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: List of branches
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBranches'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /list/site:
+    get:
+      tags: [Sites]
+      summary: Read site data
+      operationId: listSites
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: List of sites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSites'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /list/site/branch/{branchCode}:
+    get:
+      tags: [Sites]
+      summary: Read site data for specific branch
+      operationId: listSitesByBranch
+      parameters:
+        - $ref: '#/components/parameters/BranchCode'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Sites for a branch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedSites'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /list/officer:
+    get:
+      tags: [Officers]
+      summary: Read officer data
+      operationId: listOfficers
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: List of officers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOfficers'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /list/officer/branch/{branchCode}:
+    get:
+      tags: [Officers]
+      summary: Read officer data for specific branch
+      operationId: listOfficersByBranch
+      parameters:
+        - $ref: '#/components/parameters/BranchCode'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Officers for a branch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOfficers'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /list/officer/site/{siteCode}:
+    get:
+      tags: [Officers]
+      summary: Read officer data for specific site
+      operationId: listOfficersBySite
+      parameters:
+        - $ref: '#/components/parameters/SiteCode'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Limit'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Officers for a site
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOfficers'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    BranchCode:
+      name: branchCode
+      in: path
+      required: true
+      schema:
+        type: string
+        example: BR001
+    SiteCode:
+      name: siteCode
+      in: path
+      required: true
+      schema:
+        type: string
+        example: ST001
+    Page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: Page number (starting from 1)
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      description: Number of records per page
+
+  schemas:
+    Branch:
+      type: object
+      properties:
+        branchCode: { type: string }
+        name: { type: string }
+      additionalProperties: true
+
+    Site:
+      type: object
+      properties:
+        siteCode: { type: string }
+        name: { type: string }
+        branchCode: { type: string }
+      additionalProperties: true
+
+    Officer:
+      type: object
+      properties:
+        officerId: { type: string }
+        name: { type: string }
+        siteCode: { type: string }
+        branchCode: { type: string }
+      additionalProperties: true
+
+    PaginatedBranches:
+      type: object
+      properties:
+        page: { type: integer }
+        limit: { type: integer }
+        totalRecords: { type: integer }
+        totalPages: { type: integer }
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Branch' }
+
+    PaginatedSites:
+      type: object
+      properties:
+        page: { type: integer }
+        limit: { type: integer }
+        totalRecords: { type: integer }
+        totalPages: { type: integer }
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Site' }
+
+    PaginatedOfficers:
+      type: object
+      properties:
+        page: { type: integer }
+        limit: { type: integer }
+        totalRecords: { type: integer }
+        totalPages: { type: integer }
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Officer' }
+
+    Error:
+      type: object
+      properties:
+        status: { type: integer }
+        message: { type: string }
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid authentication
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+    ServerError:
+      description: Server error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
