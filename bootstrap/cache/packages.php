@@ -22,6 +22,13 @@
       0 => 'L5Swagger\\L5SwaggerServiceProvider',
     ),
   ),
+  'kitloong/laravel-migrations-generator' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'KitLoong\\MigrationsGenerator\\MigrationsGeneratorServiceProvider',
+    ),
+  ),
   'laravel/breeze' => 
   array (
     'providers' => 
